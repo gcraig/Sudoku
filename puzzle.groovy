@@ -4,10 +4,6 @@
  *
  */
 
-/* define puzzle matrix */
-def puzzle = new Object[9][9]
-Random rnd = new Random()
-
 def inRow(puzzle, rowNum, val) {
     def col = 0..8  
     def used = false
@@ -28,31 +24,58 @@ def inCol(puzzle, colNum, val) {
     return used
 }
 
-/* Latin Square */
-def inLSq(puzzle, lsNum, val) {
+def whichLS(row, col) {
 
+    if ( row < 3 && col < 3 )
+        return 0
+    if ( row < 3 && col < 6 )
+        return 1 
+    if ( row < 3 && col < 9 )
+        return 2 
+
+    if ( row < 6 && col < 3 )
+        return 3 
+    if ( row < 6 && col < 6 )
+        return 4 
+    if ( row < 6 && col < 9 )
+        return 5 
+
+    if ( row < 9 && col < 3 )
+        return 6 
+    if ( row < 9 && col < 6 )
+        return 7 
+    if ( row < 9 && col < 9 )
+        return 8 
+}
+        
+/* Latin Square */
+def inLSq(puzzle, row, col, val) {
+
+    lsNum = whichLS(row, col)
+              
     rowRange = null
     colRange = null
     
     if (lsNum < 3 && lsNum > -1) {
         rowRange = 0..2
-        switch(lsNum) 
-            0: colRange = 0..2
+        switch(lsNum) {
+            case 0: colRange = 0..2
                 break
-            1: colRange = 3..5
+            case 1: colRange = 3..5
                 break
-            2: colRange = 6..8
+            case 2: colRange = 6..8
                 break
+        }
     }
 
     if (lsNum < 6 && lsNum > 2) {
         rowRange = 3..5
         switch(lsNum) {
-            3: colRange = 0..2
+            case 3: colRange = 0..2
                 break
-            4: colRange = 3..5
+            case 4: colRange = 3..5
                 break
-            5: colRange = 6..8
+            case 5: colRange = 6..8
                 break
         }
     }
@@ -60,11 +83,11 @@ def inLSq(puzzle, lsNum, val) {
     if (lsNum < 9 && lsNum > 5) {
         rowRange = 6..8
         switch(lsNum) {
-            6: colRange = 0..2
+            case 6: colRange = 0..2
                 break
-            7: colRange = 3..5
+            case 7: colRange = 3..5
                 break
-            8: colRange = 6..8
+            case 8: colRange = 6..8
                 break
         }
     }
@@ -72,6 +95,7 @@ def inLSq(puzzle, lsNum, val) {
     (rowRange).each{i->
       (colRange).each{j->
         if (puzzle[i][j] == val)
+            print j
             return true
       }
     }
@@ -81,28 +105,39 @@ def inLSq(puzzle, lsNum, val) {
 
 def buildPuzzle() {
 
-    set = false
+    rowRange = null
+    colRange = null
+
+    def puzzle = new Object[9][9]
+    Random rnd = new Random()
     
-    (rowRange).each{i->
-      (colRange).each{j->
+    done = false
+    
+    (0..8).each{row->
+      (0..8).each{col->
       
-        while(!set) {
+        while(!done) {
             x = rnd.nextInt(9) + 1
-            if (inRow(puzzle, i, x) ||
-                inCol(puzzle, j, x) ||
-                inLSq(puzzle, 0, x))
+            if (inRow(puzzle, row, x) ||
+                inCol(puzzle, col, x) ||
+                inLSq(puzzle, row, col, x))
                 {
-                    set = false
+                    done = false
                 } else {
-                    set = true
-                    puzzle[i][j] = x
+                    done = true
+                    puzzle[row][col] = x
+                    //print x + " "
                 }
         }
-      
+        
+        if (col % 9 == 0)
+            //println ""
+
+        done = false
        
       } // colRange
     } // rowRange
-    
+  
 }
 
 buildPuzzle()
