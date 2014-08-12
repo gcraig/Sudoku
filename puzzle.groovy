@@ -2,6 +2,18 @@
 /*
  * brute force sudoku puzzle generator
  *
+ * Update: ok, learned simply stepping cell by
+ * cell will not work; secondly, each rule is
+ * a constraint that will require back tracking
+ * rules that may need a change in previously
+ * set values. my next solution is to merely 
+ * throw out the current random row and rely
+ * on the speed of the machine. oh, and i'm
+ * trying out a c version. if i get real serious
+ * about a solution i will digest:
+ * 
+ * http://4c.ucc.ie/~hsimonis/sudoku.pdf
+ *
  */
 
 def inRow(puzzle, rowNum, val) {
