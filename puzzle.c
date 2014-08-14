@@ -33,16 +33,17 @@ int in_row_or_col(int *puzzle, int row_col_num, int val, int row_or_col) {
 
 	int i = 0, j = 0, used = FALSE;
 
-	if (row_or_col)
-		i = row_col_num;
-	else
-		j = row_col_num;
-		
 	if (puzzle == NULL)
 		return FALSE;
 
     for (i=0; i<9; i++) {
-		if (puzzle[rowNum][i] == val)
+
+		if (row_or_col)
+			j = (puzzle[row_col_num][i] == val);
+		else
+			j = (puzzle[i][row_col_num] == val);
+
+		if (j)
 			used = TRUE;
 	}
 
