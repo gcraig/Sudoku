@@ -24,12 +24,17 @@
  *
  */
 
-typedef struct range {
-	int lo;
-	int hi;
-} range;
+static int row_beg = 0;
+static int row_end = 0;
 
-int in_row_or_col(int *puzzle, int row_col_num, int val, int row_or_col) {
+static int col_beg = 0;
+static int col_end = 0;
+
+int in_row_or_col(
+	int *puzzle, 
+	int row_col_num, 
+	int val, 
+	int row_or_col) {
 
 	int i = 0, j = 0, used = FALSE;
 
@@ -39,9 +44,9 @@ int in_row_or_col(int *puzzle, int row_col_num, int val, int row_or_col) {
     for (i=0; i<9; i++) {
 
 		if (row_or_col)
-			j = (puzzle[row_col_num][i] == val);
+			j = (puzzle[row_col_num] == val);
 		else
-			j = (puzzle[i][row_col_num] == val);
+			j = (puzzle[i] == val);
 
 		if (j)
 			used = TRUE;
@@ -52,25 +57,13 @@ int in_row_or_col(int *puzzle, int row_col_num, int val, int row_or_col) {
 
 int in_row(int **puzzle, int row_num, int val) 
 {
-	return int_row_col(*puzzle, row_num, val, ROW);
+	return in_row_or_col(*puzzle, row_num, val, ROW);
 }
 
-int in_col(int **puzzle, int colNum, int val) 
+int in_col(int **puzzle, int col_num, int val) 
 {
-	int row = 8, i = 0, used = FALSE;
-
-	if (puzzle == NULL)
-		return FALSE;
-
-    for (i=0; i<9; i++) {
-		if (puzzle[i][colNum] == val)
-			used = TRUE;
-	}
-
-    return used;
+	return in_row_or_col(*puzzle, col_num, val, COL);
 }
-
-
 
 int which_latin_sq(int row, int col) {
 
@@ -101,74 +94,76 @@ int which_latin_sq(int row, int col) {
 int in_latin_sq(int **puzzle, int row, int col, int val) {
 
 	int i = 0, j = 0;
-	int lsNum = -1;
+	int ls_num = -1;
 	
+	/*
 	range rRange = { 0, 0 };
 	range cRange = { 0, 0 };
 		
 	range *rowRange = &rRange;
 	range *colRange = &cRange;
+	*/
 	
-	lsNum = which_latin_sq(row, col);
+	ls_num = which_latin_sq(row, col);
 
-	if (lsNum == -1) {
+	if (ls_num == -1) {
 		fprintf(stderr, "error finding which latin square");
 		exit(EXIT_FAILURE); 
 	}
     
-    if (lsNum < 3 && lsNum > -1) {
-		rowRange->lo = 0;
-		rowRange->hi = 2;
-        switch(lsNum) {
+    if (ls_num < 3 && ls_num > -1) {
+		row_beg = 0;
+		row_end = 2;
+        switch(ls_num) {
             case 0: 
-				colRange->lo = 0;
-				colRange->hi = 2;
+				col_beg = 0;
+				col_end = 2;
                 break;
             case 1: 
-				colRange->lo = 3;
-				colRange->hi = 5;
+				col_beg = 3;
+				col_end = 5;
                 break;
             case 2: 
-				colRange->lo = 6;
-				colRange->hi = 8;
+				col_beg = 6;
+				col_end = 8;
                 break;
         }
     }
 
-    if (lsNum < 6 && lsNum > 2) {
-		rowRange->lo = 3;
-		rowRange->hi = 5;
-        switch(lsNum) {
+    if (ls_num < 6 && ls_num > 2) {
+		row_beg = 3;
+		row_end = 5;
+        switch(ls_num) {
             case 0: 
-				colRange->lo = 0;
-				colRange->hi = 2;
+				col_beg = 0;
+				col_end = 2;
                 break;
             case 1: 
-				colRange->lo = 3;
-				colRange->hi = 5;
+				col_beg = 3;
+				col_end = 5;
                 break;
             case 2: 
-				colRange->lo = 6;
-				colRange->hi = 8;
+				col_beg = 6;
+				col_end = 8;
                 break;
         }
     }
 
-    if (lsNum < 9 && lsNum > 5) {
-		rowRange->lo = 6;
-		rowRange->hi = 8;
-        switch(lsNum) {
+    if (ls_num < 9 && ls_num > 5) {
+		row_beg = 6;
+		row_end = 8;
+        switch(ls_num) {
             case 0: 
-				colRange->lo = 0;
-				colRange->hi = 2;
+				col_beg = 0;
+				col_end = 2;
                 break;
             case 1: 
-				colRange->lo = 3;
-				colRange->hi = 5;
+				col_beg = 3;
+				col_end = 5;
                 break;
             case 2: 
-				colRange->lo = 6;
-				colRange->hi = 8;
+				col_beg = 6;
+				col_end = 8;
                 break;
         }
     }
@@ -176,9 +171,11 @@ int in_latin_sq(int **puzzle, int row, int col, int val) {
 
 int build_puzzle(int *puzzle)
 {
-	for (i=rowRange->lo; i<rowRange->hi; i++) 
+	int i = 0, j = 0; 
+
+	for (i=0; i<9; i++) 
 	{
-		for (j=colRange->lo; j<colRange->hi; j++) 
+		for (j=0; j<9; j++) 
 		{
 			if (TRUE) // puzzle[i][j] == val
 				return TRUE;
@@ -199,55 +196,3 @@ int main(void) {
 	_getch();
 	return EXIT_SUCCESS;
 }
-
-/*
-def buildPuzzle() {
-
-    rowRange = null
-    colRange = null
-
-    def puzzle = new Object[9][9]
-    Random rnd = new Random()
-    
-    done = false
-    ctr = 1
-    
-    (0..8).each{row->
-      (0..8).each{col->
-           
-        btrack = 0
-          
-        while(!done) {
-            x = rnd.nextInt(9) + 1
-            
-            if (
-                    in_row(puzzle, row, x) ||
-                    in_col(puzzle, col, x) || 
-                    in_latin_sq(puzzle, row, col, x)
-                
-                ) {
-            
-                done = false
-                btrack++
-                
-                if (btrack > 1) 
-                    buildPuzzle()
-                
-            } else {
-            
-                puzzle[row][col] = x
-                print x + " "
-                done = true       
-            }
-        }
-        
-        if (ctr % 9 == 0)
-            println ""
-
-        done = false
-        ctr++
-        
-      } // colRange
-    } // rowRange  
-}
-*/
