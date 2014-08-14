@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
@@ -6,12 +6,15 @@
 #define TRUE   1
 #define FALSE  0
 
+#define ROW  1
+#define COL  2
+
 /*
  * brute force sudoku puzzle generator
  *
  * instead of a constrained model (perhaps leveraging
  * graphs) throw out the current random row while
- * creating a puzzle;
+ * creating a puzzle; ಠ_ಠ 
  *
  * this still does not guarantee a single solution;
  *
@@ -24,12 +27,17 @@
 typedef struct range {
 	int lo;
 	int hi;
-};
+} range;
 
-int inRow(int **puzzle, int rowNum, int val) 
-{
-	int col = 8, i = 0, used = FALSE;
+int in_row_or_col(int *puzzle, int row_col_num, int val, int row_or_col) {
 
+	int i = 0, j = 0, used = FALSE;
+
+	if (row_or_col)
+		i = row_col_num;
+	else
+		j = row_col_num;
+		
 	if (puzzle == NULL)
 		return FALSE;
 
@@ -41,7 +49,12 @@ int inRow(int **puzzle, int rowNum, int val)
     return used;
 }
 
-int inCol(int **puzzle, int colNum, int val) 
+int in_row(int **puzzle, int row_num, int val) 
+{
+	return int_row_col(*puzzle, row_num, val, ROW);
+}
+
+int in_col(int **puzzle, int colNum, int val) 
 {
 	int row = 8, i = 0, used = FALSE;
 
@@ -56,7 +69,9 @@ int inCol(int **puzzle, int colNum, int val)
     return used;
 }
 
-int whichLS(int row, int col) {
+
+
+int which_latin_sq(int row, int col) {
 
     if ( row < 3 && col < 3 )
         return 0;
@@ -82,14 +97,18 @@ int whichLS(int row, int col) {
 	return -1;
 }
 
-int inLSq(int **puzzle, int row, int col, int val) {
+int in_latin_sq(int **puzzle, int row, int col, int val) {
 
 	int i = 0, j = 0;
 	int lsNum = -1;
-	range rowRange;
-	range colRange;
 	
-	lsNum = whichLS(row, col);
+	range rRange = { 0, 0 };
+	range cRange = { 0, 0 };
+		
+	range *rowRange = &rRange;
+	range *colRange = &cRange;
+	
+	lsNum = which_latin_sq(row, col);
 
 	if (lsNum == -1) {
 		fprintf(stderr, "error finding which latin square");
@@ -97,65 +116,68 @@ int inLSq(int **puzzle, int row, int col, int val) {
 	}
     
     if (lsNum < 3 && lsNum > -1) {
-		rowRange.lo = 0;
-		rowRange.hi = 2;
+		rowRange->lo = 0;
+		rowRange->hi = 2;
         switch(lsNum) {
             case 0: 
-				colRange.lo = 0;
-				colRange.hi = 2;
+				colRange->lo = 0;
+				colRange->hi = 2;
                 break;
             case 1: 
-				colRange.lo = 3;
-				colRange.hi = 5;
+				colRange->lo = 3;
+				colRange->hi = 5;
                 break;
             case 2: 
-				colRange.lo = 6;
-				colRange.hi = 8;
+				colRange->lo = 6;
+				colRange->hi = 8;
                 break;
         }
     }
 
     if (lsNum < 6 && lsNum > 2) {
-		rowRange.lo = 3;
-		rowRange.hi = 5;
+		rowRange->lo = 3;
+		rowRange->hi = 5;
         switch(lsNum) {
             case 0: 
-				colRange.lo = 0;
-				colRange.hi = 2;
+				colRange->lo = 0;
+				colRange->hi = 2;
                 break;
             case 1: 
-				colRange.lo = 3;
-				colRange.hi = 5;
+				colRange->lo = 3;
+				colRange->hi = 5;
                 break;
             case 2: 
-				colRange.lo = 6;
-				colRange.hi = 8;
+				colRange->lo = 6;
+				colRange->hi = 8;
                 break;
         }
     }
 
     if (lsNum < 9 && lsNum > 5) {
-		rowRange.lo = 6;
-		rowRange.hi = 8;
+		rowRange->lo = 6;
+		rowRange->hi = 8;
         switch(lsNum) {
             case 0: 
-				colRange.lo = 0;
-				colRange.hi = 2;
+				colRange->lo = 0;
+				colRange->hi = 2;
                 break;
             case 1: 
-				colRange.lo = 3;
-				colRange.hi = 5;
+				colRange->lo = 3;
+				colRange->hi = 5;
                 break;
             case 2: 
-				colRange.lo = 6;
-				colRange.hi = 8;
+				colRange->lo = 6;
+				colRange->hi = 8;
                 break;
         }
     }
+}
 
-	for (i=rowRange.lo; i<rowRange.hi; i++) 
+int build_puzzle(int *puzzle)
+{
+	for (i=rowRange->lo; i<rowRange->hi; i++) 
 	{
-		for (j=colRange.lo; j<colRange.hi; j++) 
+		for (j=colRange->lo; j<colRange->hi; j++) 
 		{
 			if (TRUE) // puzzle[i][j] == val
 				return TRUE;
@@ -165,9 +187,16 @@ int inLSq(int **puzzle, int row, int col, int val) {
 	return FALSE;
 }
 
-main() {
+int main(void) {
+	
+	int puzzle_matrix[9][9]; 
+	int *puzzle = puzzle_matrix[0];
+
 	printf("generating sudoku puzzle ...\n");
+	build_puzzle(puzzle);
+
 	_getch();
+	return EXIT_SUCCESS;
 }
 
 /*
@@ -191,9 +220,9 @@ def buildPuzzle() {
             x = rnd.nextInt(9) + 1
             
             if (
-                    inRow(puzzle, row, x) ||
-                    inCol(puzzle, col, x) || 
-                    inLSq(puzzle, row, col, x)
+                    in_row(puzzle, row, x) ||
+                    in_col(puzzle, col, x) || 
+                    in_latin_sq(puzzle, row, col, x)
                 
                 ) {
             
