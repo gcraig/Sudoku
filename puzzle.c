@@ -20,7 +20,8 @@
  *
  * http://4c.ucc.ie/~hsimonis/sudoku.pdf
  *
- * c. George Craig. Public Domain.
+ * George Craig code released under Public Domain.
+ * Please see LICENSE.
  *
  */
 
