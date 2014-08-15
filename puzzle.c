@@ -29,11 +29,13 @@
  * add complexity to what I thought was a simple problem.
  * This exercise has been fun! I've learned a great deal from
  * thinking it was a simple incremental random number to 
- * discarding rows as I built up an aglorithm on the fly to
+ * discarding rows as I built up an algorithm on the fly to
  * solve this problem. I finally did some real research and
  * learned the scale of this problem. I want to build a 
  * fully working generator, to easily output various puzzles
- * of varying complexity. 
+ * of varying complexity. Perhaps an event-based version will
+ * be better; easier to implement the backtrack/callback, graph
+ * constraint.
  * 
  * 8/14/14 - does not compile/run correctly
  * 
@@ -87,7 +89,7 @@ int in_col(int puzzle[9][9], int col_num, int val)
 int which_latin_sq(int row, int col) {
 
 	/* stupidly simply lookup table, 
-	 * optimiaztion later
+	 * optimization later
 	 */
     if ( row < 3 && col < 3 )
         return 0;
