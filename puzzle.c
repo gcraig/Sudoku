@@ -13,7 +13,9 @@
 /**
  * brute force sudoku puzzle generator
  *
- * instead of a constrained model (perhaps leveraging
+ * attempt #3
+ *
+ * attempt #2: instead of a constrained model (perhaps leveraging
  * graphs) throw out the current random row while
  * creating a puzzle; ಠ_ಠ 
  *
@@ -44,6 +46,43 @@
  * Please see LICENSE.
  *
  */
+
+/* 
+I wrote a solver that uses brute force, not 'logic', based on the fact that
+there are only 46,656 (9x6x3x6x4x2x3x2) possible patterns of one number in
+a 9x9 puzzle. Just generate all of them, eliminate those for each number that
+are not consistent with the positions of that number, then successively merge
+non-conflicting patterns across numbers. Requires no look-ahead/backtracking,
+just match/eliminate. Has 217 lines of Ruby code, and will solve 'hard' puzzles
+in about 30 seconds on my 5 year old PC.
+
+Posted by: Hal at January 2, 2009 09:07 PM
+hal.noyes@gmail.com
+*/
+
+/**
+ * attempt #3: start with a known working puzzle 
+ * http://davidbau.com/archives/2006/09/04/sudoku_generator.html
+ * http://www.setbb.com/phpbb/viewtopic.php?t=314&mforum=sudoku
+ * 
+ * - 1. randomly switch two lines(row) in a group or switch two big groups. OR
+ * - 2. randomly switch all positions for two numbers, like switch all 1 and 2 
+ * - Now you have a valid solution, you just need to get rid of
+ *   number from it to create a sudoku.
+ */
+static int[81] puzzle = {
+    
+    1, 2, 3, 4, 5, 6, 7, 8, 9,
+    4, 5, 6, 7, 8, 9, 1, 2, 3,
+    7, 8, 9, 1, 2, 3, 4, 5, 6,
+    2, 3, 4, 5, 6, 7, 8, 9, 1,
+    5, 6, 7, 8, 9, 1, 2, 3, 4,
+    8, 9, 1, 2, 3, 4, 5, 6, 7,
+    3, 4, 5, 6, 7, 8, 9, 1, 2,
+    6, 7, 8, 9, 1, 2, 3, 4, 5,
+    9, 1, 2, 3, 4, 5, 6, 7, 8 
+
+} 
 
 static int row_beg = 0;
 static int row_end = 0;
