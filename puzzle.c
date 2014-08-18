@@ -4,16 +4,16 @@
 #include <time.h>
 #include <conio.h>
 
-#define TRUE   1
-#define FALSE  0
-
 #define ROW  1
 #define COL  0
 
 /**
  * brute force sudoku puzzle generator
  *
- * attempt #3
+ * attempt #3: start with known puzzle and swap two digits, continue
+ * randomly for x amount of time; begin removing digits per latin
+ * square - needs algorithm for weighting the difficulty of a puzzle
+ * and whether or not it can be solvable. 
  *
  * attempt #2: instead of a constrained model (perhaps leveraging
  * graphs) throw out the current random row while
@@ -40,25 +40,25 @@
  * constraint.
  * 
  * 8/14/14 - does not compile/run correctly
+ * 8/17/14 - compiles and generates a completed puzzle
  * 
  * George Craig 
  * Code released under Public Domain.
  * Please see LICENSE.
- *
  */
 
 /* 
-I wrote a solver that uses brute force, not 'logic', based on the fact that
-there are only 46,656 (9x6x3x6x4x2x3x2) possible patterns of one number in
-a 9x9 puzzle. Just generate all of them, eliminate those for each number that
-are not consistent with the positions of that number, then successively merge
-non-conflicting patterns across numbers. Requires no look-ahead/backtracking,
-just match/eliminate. Has 217 lines of Ruby code, and will solve 'hard' puzzles
-in about 30 seconds on my 5 year old PC.
-
-Posted by: Hal at January 2, 2009 09:07 PM
-hal.noyes@gmail.com
-*/
+ * I wrote a solver that uses brute force, not 'logic', based on the fact that
+ * there are only 46,656 (9x6x3x6x4x2x3x2) possible patterns of one number in
+ * a 9x9 puzzle. Just generate all of them, eliminate those for each number that
+ * are not consistent with the positions of that number, then successively merge
+ * non-conflicting patterns across numbers. Requires no look-ahead/backtracking,
+ * just match/eliminate. Has 217 lines of Ruby code, and will solve 'hard' puzzles
+ * in about 30 seconds on my 5 year old PC.
+ * 
+ * Posted by: Hal at January 2, 2009 09:07 PM
+ * hal.noyes@gmail.com
+ */
 
 /**
  * attempt #3: start with a known working puzzle 
@@ -70,6 +70,7 @@ hal.noyes@gmail.com
  * - Now you have a valid solution, you just need to get rid of
  *   number from it to create a sudoku.
  */
+
 int puzzle_matrix[] = {
     
     1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -90,12 +91,12 @@ int puzzle_matrix[] = {
  *
  * TODO: unit test, remove magic number
  */
-/*
+
 int swap_numbers(int *puzzle, int num1, int num2) 
 {
     int num_swaps = 0;
 
-    while (puzzle < 81)
+    while (puzzle < &puzzle_matrix[81])
     {
         if (*puzzle == num1)
         {
@@ -112,27 +113,22 @@ int swap_numbers(int *puzzle, int num1, int num2)
 
     return num_swaps;
 }
-*/
-int print_puzzle()
-{
-    int i = 0;
-    int p[] = { 10, 20, 30, 40 };
-    //int *pi = &p[0];
-    int *pi = p;
 
-    for (i = 0; i < 4; i++) {
-        printf("%i\n", p[i]);
-    }
-    /* 
-    printf("%i\n", *pi);
-    pi++;
-     
-    printf("%i\n", *pi);
-    */
-    while (pi != NULL)
-    {
-        printf("%i\n ", *pi);
-        ++pi; 
+int print_puzzle(int *puzzle)
+{
+    //int p[] = { 10, 20, 30, 40 };
+    //int *pi = &p[0];
+    //int *pi = p;
+    //while (pi < &p[4])
+   
+    int i = 0;
+ 
+    while(puzzle < &puzzle_matrix[81])
+    {   
+        i++;
+        printf("%i ", *puzzle++);
+        if ((i % 9) == 0)
+            printf("\n");
     }
 
     return 0;
@@ -289,94 +285,23 @@ int in_latin_sq(int puzzle[9][9], int row, int col, int val) {
         }
     }
 }
-
-void print_puzzle(int puzzle[9][9]) 
-{
-    int i = 0, j = 0;
-
-    for (i=0; i<9; i++) 
-    {
-        for (j=0; j<9; j++) 
-        {
-            printf("%d ", puzzle[i][j]);
-        }
-
-        printf("\n");
-    }
-}
-*/
-/**
- * TODO: Add second counter, throw out rows before throwing out
- * entire puzzle
- */
-/*
-int build_puzzle(int puzzle[9][9])
-{
-    int i = 0, j = 0, r = 0, ctr = 0; 
-
-    srand(time(NULL));
-
-restart: 
-
-    for (i=0; i<9; i++) 
-    {
-        for (j=0; j<9; j++) 
-        {
-            //printf(".");
-reguess:
-            r = (rand() % 9);
-            r++;
-
-            if (in_row(puzzle, i, r) || in_col(puzzle, j, r) || in_latin_sq(puzzle, i, j, r))
-            {
-
-                goto reguess;
-
-                // throw out guess and restart
-                if (j!=0)
-                    --j;
-                continue;
-            } else {
-                puzzle[i][j] = r;	
-                //printf(". ");
-                printf("%d ", r);
-            }
-
-               if (puzzle[i][j] == val
-               return TRUE;
-        }
-
-        printf("\n");
-        //printf("\nRow Complete ------------------------- %d\n", i);
-    }
-
-    printf("\n");
-    print_puzzle(puzzle);
-
-    return TRUE;
-}
 */
 
 int main(void) {
 
-    //int puzzle_matrix[9][9]; 
-    //int *puzzle = puzzle_matrix[0];
-
-    //printf("generating sudoku puzzle ...\n");
-    //build_puzzle(puzzle_matrix);
-
-    // int *puzzle[sizeof(puzzle_matrix)/sizeof(puzzle_matrix[0])] = &puzzle_matrix;
-
-    //int a1[5] = {1, 2, 3, 4, 5};
-    //int (*a)[5] = &a1;
-    //printf("%d", *a); 
-
-    //int (*puzzle)[81] = &puzzle_matrix;
+    printf("generating sudoku puzzle ...\n");
 
     //int *puzzle = &puzzle_matrix[0];
     //print_puzzle(puzzle);
 
-    print_puzzle();
+    int *puzzle = puzzle_matrix;
+    print_puzzle(puzzle);
+
+    swap_numbers(puzzle, 1, 3);
+    swap_numbers(puzzle, 9, 4);
+
+    printf("\n\n");
+    print_puzzle(puzzle);
 
     _getch();
     return EXIT_SUCCESS;
