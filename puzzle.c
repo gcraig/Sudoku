@@ -70,7 +70,7 @@ hal.noyes@gmail.com
  * - Now you have a valid solution, you just need to get rid of
  *   number from it to create a sudoku.
  */
-static int[81] puzzle = {
+int puzzle_matrix[] = {
     
     1, 2, 3, 4, 5, 6, 7, 8, 9,
     4, 5, 6, 7, 8, 9, 1, 2, 3,
@@ -82,14 +82,71 @@ static int[81] puzzle = {
     6, 7, 8, 9, 1, 2, 3, 4, 5,
     9, 1, 2, 3, 4, 5, 6, 7, 8 
 
-} 
+}; 
 
+/**
+ * swap two numbers throughout the given puzzle
+ * matrix; returning the number of swaps
+ *
+ * TODO: unit test, remove magic number
+ */
+/*
+int swap_numbers(int *puzzle, int num1, int num2) 
+{
+    int num_swaps = 0;
+
+    while (puzzle < 81)
+    {
+        if (*puzzle == num1)
+        {
+            num_swaps++;
+            *puzzle = num2;
+        }
+        else if (*puzzle == num2)
+        {
+            num_swaps++;
+            *puzzle = num1;
+        }
+        puzzle++;
+    }
+
+    return num_swaps;
+}
+*/
+int print_puzzle()
+{
+    int i = 0;
+    int p[] = { 10, 20, 30, 40 };
+    //int *pi = &p[0];
+    int *pi = p;
+
+    for (i = 0; i < 4; i++) {
+        printf("%i\n", p[i]);
+    }
+    /* 
+    printf("%i\n", *pi);
+    pi++;
+     
+    printf("%i\n", *pi);
+    */
+    while (pi != NULL)
+    {
+        printf("%i\n ", *pi);
+        ++pi; 
+    }
+
+    return 0;
+}
+
+/*
 static int row_beg = 0;
 static int row_end = 0;
 
 static int col_beg = 0;
 static int col_end = 0;
+*/
 
+/*
 int in_row_or_col(
         int puzzle[9][9], 
         int row_col_num, 
@@ -124,12 +181,13 @@ int in_col(int puzzle[9][9], int col_num, int val)
 {
     return in_row_or_col(*puzzle, col_num, val, COL);
 }
+*/
 
+/*
 int which_latin_sq(int row, int col) {
 
-    /* stupidly simply lookup table, 
-     * optimization later
-     */
+    * stupidly simply lookup table, 
+    * optimization later
     if ( row < 3 && col < 3 )
         return 0;
     if ( row < 3 && col < 6 )
@@ -159,13 +217,11 @@ int in_latin_sq(int puzzle[9][9], int row, int col, int val) {
     int i = 0, j = 0;
     int ls_num = -1;
 
-    /*
        range rRange = { 0, 0 };
        range cRange = { 0, 0 };
 
        range *rowRange = &rRange;
        range *colRange = &cRange;
-     */
 
     ls_num = which_latin_sq(row, col);
 
@@ -174,10 +230,8 @@ int in_latin_sq(int puzzle[9][9], int row, int col, int val) {
         exit(EXIT_FAILURE); 
     }
 
-    /**
      * another stupid simple temp
      * lookup table
-     */ 
     if (ls_num < 3 && ls_num > -1) {
         row_beg = 0;
         row_end = 2;
@@ -250,12 +304,12 @@ void print_puzzle(int puzzle[9][9])
         printf("\n");
     }
 }
-
+*/
 /**
  * TODO: Add second counter, throw out rows before throwing out
  * entire puzzle
  */
-
+/*
 int build_puzzle(int puzzle[9][9])
 {
     int i = 0, j = 0, r = 0, ctr = 0; 
@@ -275,18 +329,6 @@ reguess:
 
             if (in_row(puzzle, i, r) || in_col(puzzle, j, r) || in_latin_sq(puzzle, i, j, r))
             {
-                /*
-                   ctr++;
-                   if (ctr>10000) {
-                   i = 0;
-                   j = 0;
-                   ctr = 0;
-                   printf("\n**************\n");
-                   printf("*** RESTART ***");
-                   printf("\n**************\n");
-                   goto restart;
-                   }
-                 */
 
                 goto reguess;
 
@@ -300,10 +342,8 @@ reguess:
                 printf("%d ", r);
             }
 
-            /*
                if (puzzle[i][j] == val
                return TRUE;
-             */
         }
 
         printf("\n");
@@ -315,14 +355,28 @@ reguess:
 
     return TRUE;
 }
+*/
 
 int main(void) {
 
-    int puzzle_matrix[9][9]; 
-    int *puzzle = puzzle_matrix[0];
+    //int puzzle_matrix[9][9]; 
+    //int *puzzle = puzzle_matrix[0];
 
-    printf("generating sudoku puzzle ...\n");
-    build_puzzle(puzzle_matrix);
+    //printf("generating sudoku puzzle ...\n");
+    //build_puzzle(puzzle_matrix);
+
+    // int *puzzle[sizeof(puzzle_matrix)/sizeof(puzzle_matrix[0])] = &puzzle_matrix;
+
+    //int a1[5] = {1, 2, 3, 4, 5};
+    //int (*a)[5] = &a1;
+    //printf("%d", *a); 
+
+    //int (*puzzle)[81] = &puzzle_matrix;
+
+    //int *puzzle = &puzzle_matrix[0];
+    //print_puzzle(puzzle);
+
+    print_puzzle();
 
     _getch();
     return EXIT_SUCCESS;
