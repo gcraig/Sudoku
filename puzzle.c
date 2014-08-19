@@ -4,9 +4,6 @@
 #include <time.h>
 #include <conio.h>
 
-#define ROW  1
-#define COL  0
-
 /**
  * brute force sudoku puzzle generator
  *
