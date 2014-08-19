@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -72,7 +72,7 @@
  */
 
 int puzzle_matrix[] = {
-    
+
     1, 2, 3, 4, 5, 6, 7, 8, 9,
     4, 5, 6, 7, 8, 9, 1, 2, 3,
     7, 8, 9, 1, 2, 3, 4, 5, 6,
@@ -120,9 +120,9 @@ int print_puzzle(int *puzzle)
     //int *pi = &p[0];
     //int *pi = p;
     //while (pi < &p[4])
-   
+
     int i = 0;
- 
+
     while(puzzle < &puzzle_matrix[81])
     {   
         i++;
@@ -134,175 +134,36 @@ int print_puzzle(int *puzzle)
     return 0;
 }
 
-/*
-static int row_beg = 0;
-static int row_end = 0;
-
-static int col_beg = 0;
-static int col_end = 0;
-*/
-
-/*
-int in_row_or_col(
-        int puzzle[9][9], 
-        int row_col_num, 
-        int val, 
-        int row_or_col) {
-
-    int i = 0, j = 0, used = FALSE;
-
-    if (puzzle == NULL)
-        return FALSE;
-
-    for (i=0; i<9; i++) {
-
-        if (row_or_col)
-            j = (puzzle[row_col_num][i] == val);
-        else
-            j = (puzzle[i][row_col_num] == val);
-
-        if (j)
-            used = TRUE;
-    }
-
-    return used;
-}
-
-int in_row(int puzzle[9][9], int row_num, int val) 
+int build_puzzle(int* puzzle)
 {
-    return in_row_or_col(*puzzle, row_num, val, ROW);
-}
-
-int in_col(int puzzle[9][9], int col_num, int val) 
-{
-    return in_row_or_col(*puzzle, col_num, val, COL);
-}
-*/
-
-/*
-int which_latin_sq(int row, int col) {
-
-    * stupidly simply lookup table, 
-    * optimization later
-    if ( row < 3 && col < 3 )
-        return 0;
-    if ( row < 3 && col < 6 )
-        return 1;
-    if ( row < 3 && col < 9 )
-        return 2;
-
-    if ( row < 6 && col < 3 )
-        return 3; 
-    if ( row < 6 && col < 6 )
-        return 4; 
-    if ( row < 6 && col < 9 )
-        return 5; 
-
-    if ( row < 9 && col < 3 )
-        return 6; 
-    if ( row < 9 && col < 6 )
-        return 7; 
-    if ( row < 9 && col < 9 )
-        return 8; 
-
-    return -1;
-}
-
-int in_latin_sq(int puzzle[9][9], int row, int col, int val) {
-
-    int i = 0, j = 0;
-    int ls_num = -1;
-
-       range rRange = { 0, 0 };
-       range cRange = { 0, 0 };
-
-       range *rowRange = &rRange;
-       range *colRange = &cRange;
-
-    ls_num = which_latin_sq(row, col);
-
-    if (ls_num == -1) {
-        fprintf(stderr, "error finding which latin square");
-        exit(EXIT_FAILURE); 
-    }
-
-     * another stupid simple temp
-     * lookup table
-    if (ls_num < 3 && ls_num > -1) {
-        row_beg = 0;
-        row_end = 2;
-        switch(ls_num) {
-            case 0: 
-                col_beg = 0;
-                col_end = 2;
-                break;
-            case 1: 
-                col_beg = 3;
-                col_end = 5;
-                break;
-            case 2: 
-                col_beg = 6;
-                col_end = 8;
-                break;
-        }
-    }
-
-    if (ls_num < 6 && ls_num > 2) {
-        row_beg = 3;
-        row_end = 5;
-        switch(ls_num) {
-            case 0: 
-                col_beg = 0;
-                col_end = 2;
-                break;
-            case 1: 
-                col_beg = 3;
-                col_end = 5;
-                break;
-            case 2: 
-                col_beg = 6;
-                col_end = 8;
-                break;
-        }
-    }
-
-    if (ls_num < 9 && ls_num > 5) {
-        row_beg = 6;
-        row_end = 8;
-        switch(ls_num) {
-            case 0: 
-                col_beg = 0;
-                col_end = 2;
-                break;
-            case 1: 
-                col_beg = 3;
-                col_end = 5;
-                break;
-            case 2: 
-                col_beg = 6;
-                col_end = 8;
-                break;
-        }
-    }
-}
-*/
-
-int main(void) {
-
     printf("generating sudoku puzzle ...\n");
 
     //int *puzzle = &puzzle_matrix[0];
-    //print_puzzle(puzzle);
+    //int *puzzle = puzzle_matrix;
+    int num_itr = 0, i = 0, x = 0, y = 0;
 
+    srand(time(NULL));
+    num_itr = (rand() % 1000);
+    printf("number iterations: %d\n", num_itr);
+
+    for (i = 0; i<num_itr; i++) 
+    {
+        x = (rand() % 9);
+        y = (rand() % 9);
+        x++;
+        y++;
+        //printf("x = %d, y = %d\n", x, y);
+        swap_numbers(puzzle, x, y);
+    }
+
+    printf("\n");
+    print_puzzle(puzzle);
+    return 0;
+}
+
+int main(void) 
+{
     int *puzzle = puzzle_matrix;
-    print_puzzle(puzzle);
-
-    swap_numbers(puzzle, 1, 3);
-    swap_numbers(puzzle, 9, 4);
-
-    printf("\n\n");
-    print_puzzle(puzzle);
-
-    _getch();
+    build_puzzle(puzzle);
     return EXIT_SUCCESS;
 }
