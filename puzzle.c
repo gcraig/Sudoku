@@ -74,7 +74,7 @@ int build_puzzle(int* puzzle)
     printf("generating sudoku puzzle ...\n");
     
     srand(time(NULL));
-    num_itr = (rand() % 1000);
+    num_itr = (rand() % 1000000);
     printf("number iterations: %d\n", num_itr);
 
     for (i = 0; i<num_itr; i++) 
