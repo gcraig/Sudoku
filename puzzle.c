@@ -70,9 +70,9 @@ int print_puzzle(int *puzzle)
 
 int build_puzzle(int* puzzle)
 {
-    printf("generating sudoku puzzle ...\n");
     int num_itr = 0, i = 0, x = 0, y = 0;
-
+    printf("generating sudoku puzzle ...\n");
+    
     srand(time(NULL));
     num_itr = (rand() % 1000);
     printf("number iterations: %d\n", num_itr);
