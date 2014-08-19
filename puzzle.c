@@ -83,7 +83,7 @@ int build_puzzle(int* puzzle)
         y = (rand() % 9);
         x++;
         y++;
-        //printf("x = %d, y = %d\n", x, y);
+        /* printf("x = %d, y = %d\n", x, y); */
         swap_numbers(puzzle, x, y);
     }
 
