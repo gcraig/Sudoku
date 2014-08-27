@@ -71,7 +71,7 @@ int print_puzzle(int *puzzle)
 int build_puzzle(int* puzzle)
 {
     int num_itr = 0, i = 0, x = 0, y = 0;
-    printf("generating sudoku puzzle ...\n");
+    puts("generating sudoku puzzle ...");
     
     srand(time(NULL));
     num_itr = (rand() % 1000000);
@@ -87,7 +87,7 @@ int build_puzzle(int* puzzle)
         swap_numbers(puzzle, x, y);
     }
 
-    printf("\n");
+    puts();
     print_puzzle(puzzle);
     return 0;
 }
