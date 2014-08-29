@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-/**
- * brute force sudoku puzzle generator
+/* brute force sudoku puzzle generator
  *
- * (1) no guarantee that the puzzle generated has only one solution
+ * (1) no verification that the puzzle generated has only one solution
  * (2) -Wall -std=c11 -pedantic -O3
  *
  * george craig 
@@ -29,42 +28,27 @@ int puzzle_solution[] = {
 
 int puzzle_matrix[81];
 
-/*
-const int EASY       = 18; numbers to remove
-const int MEDIUM     = 36;
-const int HARD       = 54;
-const int DIFFICULTY = EASY; TODO: command line option
-*/
-
-#define EASY       18 /* numbers to remove */
+/* 
+numbers to remove 
+#define EASY       18 
 #define MEDIUM     36
 #define HARD       54
-#define DIFFICULTY 18 /* TODO: command line option */
-#define JSW_RANDOM
+*/
 
+#define DIFFICULTY 18 /* TODO: command line option */
+
+#define JSW_RANDOM
 #ifdef JSW_RANDOM
-/* include prototypes of custom random generator */
-unsigned long jsw_rand (void);
-void jsw_seed (unsigned long s);
+	/* include prototypes of custom random generator */
+	unsigned long jsw_rand (void);
+	void jsw_seed (unsigned long s);
 #endif
 
-/**
- * swap two numbers throughout the given puzzle
+/* swap two numbers throughout the given puzzle
  * matrix; returning the number of swaps
  *
  * TODO: unit test, remove magic number
  */
-
- /*
-  * There is a stdlib call "rand"; this function is tuned primarily for speed
-  * and distribution, not for unpredictability. Almost all built-in random 
-  * functions for various languages and frameworks use this function by 
-  * default. There are also "cryptographic" random number generators that are
-  * much less predictable, but run much slower. These should be used in any sort
-  * of security-related application. - tylerl
-  * http://stackoverflow.com/questions/822323/how-to-generate-a-random-number-in-c
-  */
-
 int swap_numbers(int *puzzle, int num1, int num2) 
 {
     int num_swaps = 0;
@@ -87,14 +71,31 @@ int swap_numbers(int *puzzle, int num1, int num2)
     return num_swaps;
 }
 
-int print_puzzle(int *puzzle)
+/* print in a 9x9 grid, the sudoku puzzle
+ * as stored as a int[] array of 81 ints.
+ * beware of pointer arithmetic 
+ */
+int print_grid(int array[])
 {
     int i = 0;
+	int *p = array;
 
-    while(puzzle < &puzzle_solution[81])
+    while(p < &array[81])
     {   
         i++;
-        printf("%i ", *puzzle++);
+
+		/* a completed puzzle will contain values 1-9
+		 * so this function serves to also print an
+		 * unsolved puzzle; if a number is 0 we are
+		 * hiding it's value
+		 */
+		
+		if(*p==0) {
+			printf("_ ");
+			p++;
+		} else
+			printf("%i ", *p++);
+
         if ((i % 9) == 0)
             printf("\n");
     }
@@ -102,21 +103,9 @@ int print_puzzle(int *puzzle)
     return 0;
 }
 
-int print_matrix(int *matrix)
-{
-    int i = 0;
-
-    while(matrix < &puzzle_matrix[81])
-    {   
-        i++;
-        printf("%i ", *matrix++);
-        if ((i % 9) == 0)
-            printf("\n");
-    }
-
-    return 0;
-}
-
+/* remove random values from printed grid 
+ * for solving by us apes
+ */
 void remove_values(int* matrix)
 {
 	puts("remove values...");
@@ -132,8 +121,7 @@ void remove_values(int* matrix)
 
 		if (nr>0)
 		{
-			/*
-			 * TODO: This has to change, the distribution
+			/* TODO: This has to change, the distribution
 			 * of removed values has to be spread across all
 			 * latin squares, as it stands now, it will tend
 			 * to only remove values from the beginning sequence
@@ -155,13 +143,26 @@ void remove_values(int* matrix)
 		
 	}
 
-	print_matrix(matrix);
+	print_grid(puzzle_matrix);
 }
 
+/* randomly swap out values, by num_itr,
+ * number of iterations, of known solved puzzle;
+ * should result in a new (completed) random puzzle
+ */
 int build_puzzle(int* puzzle, int* matrix)
 {
     int num_itr = 0, x = 0, y = 0;
     puts("generating sudoku puzzle ...");
+
+	/* There is a stdlib call "rand"; this function is tuned primarily for speed
+	 * and distribution, not for unpredictability. Almost all built-in random 
+	 * functions for various languages and frameworks use this function by 
+	 * default. There are also "cryptographic" random number generators that are
+	 * much less predictable, but run much slower. These should be used in any sort
+	 * of security-related application. - tylerl
+	 * http://stackoverflow.com/questions/822323/how-to-generate-a-random-number-in-c
+	 */
 
 #ifdef JSW_RANDOM
 	puts("using jsw_srand()");
@@ -191,7 +192,7 @@ int build_puzzle(int* puzzle, int* matrix)
     }
 
     puts("\n");
-    print_puzzle(puzzle);
+    print_grid(puzzle_solution);
 	remove_values(matrix);
     return 0;
 }
