@@ -1,8 +1,8 @@
 
 CC=gcc
-CFLAGS=-c -Wall -std=c11 -pedantic -ansi
+CFLAGS=-c -Wall -std=c11 -pedantic -O3
 LDFLAGS=
-SOURCES=puzzle.c
+SOURCES=puzzle.c random.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=puzzle
 
