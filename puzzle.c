@@ -8,6 +8,7 @@
  * (2) -Wall -std=c11 -pedantic -O3
  *
  * george craig 
+ * csr development, co.
  * code released into the public domain.
  * please see LICENSE
  */
@@ -49,7 +50,7 @@ numbers to remove
  *
  * TODO: unit test, remove magic number
  */
-int swap_numbers(int *puzzle, int num1, int num2) 
+static int swap_numbers(int *puzzle, int num1, int num2) 
 {
     int num_swaps = 0;
 
@@ -75,7 +76,7 @@ int swap_numbers(int *puzzle, int num1, int num2)
  * as stored as a int[] array of 81 ints.
  * beware of pointer arithmetic 
  */
-int print_grid(int array[])
+static void print_grid(int array[])
 {
     int i = 0;
 	int *p = array;
@@ -99,14 +100,24 @@ int print_grid(int array[])
         if ((i % 9) == 0)
             printf("\n");
     }
+}
 
-    return 0;
+static void pick_values(int* matrix) 
+{
+    /* number of removed cells per latin square
+     * based on difficulty
+     */
+    int nr = DIFFICULTY / 9;
+    for (int i=0; i<9; i++) {
+        for (int j=0; j<nr; j++) {
+        }
+    }
 }
 
 /* remove random values from printed grid 
  * for solving by us apes
  */
-void remove_values(int* matrix)
+static void remove_values(int* matrix)
 {
 	puts("remove values...");
 
@@ -114,8 +125,15 @@ void remove_values(int* matrix)
 	int nr = DIFFICULTY;
 	int r;
 
+    // for each latin square, distribute evenly the number of cells
+    // to hide
 	for (int j=0; j<81; j++)
 	{
+
+        /* obtain random list of cells to hide */
+        /* } */
+
+    // for 0 to 81, assign blanks to cells to present puzzle
 
 		puzzle_matrix[j] = puzzle_solution[j];
 
@@ -150,7 +168,7 @@ void remove_values(int* matrix)
  * number of iterations, of known solved puzzle;
  * should result in a new (completed) random puzzle
  */
-int build_puzzle(int* puzzle, int* matrix)
+static int build_puzzle(int* puzzle, int* matrix)
 {
     int num_itr = 0, x = 0, y = 0;
     puts("generating sudoku puzzle ...");
@@ -191,7 +209,6 @@ int build_puzzle(int* puzzle, int* matrix)
         swap_numbers(puzzle, x, y);
     }
 
-    puts("\n");
     print_grid(puzzle_solution);
 	remove_values(matrix);
     return 0;
