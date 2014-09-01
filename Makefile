@@ -16,4 +16,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean: 
 	rm *.o
+	rm $(EXECUTABLE)
 	echo Clean done
