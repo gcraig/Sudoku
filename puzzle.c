@@ -114,17 +114,13 @@ static void pick_values(int* matrix)
     }
 }
 
-static int*[] return_square(int ls) 
+static void return_square(int ls, int result[]) 
 {
     switch(ls) {
         case 0:
-            return 0;
             break;
         case 1:
-            return 3;
-            break;
-        default:
-            return 0;
+            break; 
     }            
 }
 
