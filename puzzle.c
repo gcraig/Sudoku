@@ -135,15 +135,19 @@ static void remove_values(int* matrix)
 	int nr = DIFFICULTY;
 	int r;
 
-    // for each latin square, distribute evenly the number of cells
-    // to hide
+
+    	// for each latin square, distribute evenly the number of cells
+    	// to hide
 	for (int j=0; j<9; j++)
 	{
-        /* obtain random list of cells to hide */
-        /* } */
+		int result[9];
+		return_square(j, result);
+	}
 
-    // for 0 to 81, assign blanks to cells to present puzzle
 
+	// for 0 to 81, assign blanks to cells to present puzzle
+	for (int j=0; j<81; j++)
+	{		
 		puzzle_matrix[j] = puzzle_solution[j];
 
 		if (nr>0)
