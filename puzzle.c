@@ -114,6 +114,20 @@ static void pick_values(int* matrix)
     }
 }
 
+static int*[] return_square(int ls) 
+{
+    switch(ls) {
+        case 0:
+            return 0;
+            break;
+        case 1:
+            return 3;
+            break;
+        default:
+            return 0;
+    }            
+}
+
 /* remove random values from printed grid 
  * for solving by us apes
  */
@@ -127,9 +141,8 @@ static void remove_values(int* matrix)
 
     // for each latin square, distribute evenly the number of cells
     // to hide
-	for (int j=0; j<81; j++)
+	for (int j=0; j<9; j++)
 	{
-
         /* obtain random list of cells to hide */
         /* } */
 
