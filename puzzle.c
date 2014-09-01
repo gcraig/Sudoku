@@ -102,17 +102,18 @@ static void print_grid(int array[])
     }
 }
 
+/*
 static void pick_values(int* matrix) 
 {
-    /* number of removed cells per latin square
-     * based on difficulty
-     */
+    // number of removed cells per latin square
+    // based on difficulty
     int nr = DIFFICULTY / 9;
     for (int i=0; i<9; i++) {
         for (int j=0; j<nr; j++) {
         }
     }
 }
+*/
 
 static void return_square(int ls, int result[]) 
 {

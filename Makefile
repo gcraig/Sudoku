@@ -1,0 +1,19 @@
+
+CC=gcc
+CFLAGS=-c -Wall -std=c11 -pedantic -O3
+LDFLAGS=
+SOURCES=puzzle.c random.c
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=puzzle
+
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.c.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean: 
+	rm *.o
+	echo Clean done
