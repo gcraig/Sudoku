@@ -40,9 +40,9 @@ numbers to remove
 
 #define JSW_RANDOM
 #ifdef JSW_RANDOM
-	/* include prototypes of custom random generator */
-	unsigned long jsw_rand (void);
-	void jsw_seed (unsigned long s);
+    /* include prototypes of custom random generator */
+    unsigned long jsw_rand (void);
+    void jsw_seed (unsigned long s);
 #endif
 
 /* swap two numbers throughout the given puzzle
@@ -136,13 +136,12 @@ static void remove_values(int* matrix)
 	int nr = DIFFICULTY;
 	int r;
 
-
-    	// for each latin square, distribute evenly the number of cells
-    	// to hide
+    // for each latin square, distribute evenly the number of cells
+    // to hide
 	for (int j=0; j<9; j++)
 	{
-		int result[9];
-		return_square(j, result);
+        int result[9];
+        return_square(j, result);
 	}
 
 
@@ -197,13 +196,13 @@ static int build_puzzle(int* puzzle, int* matrix)
 	 */
 
 #ifdef JSW_RANDOM
-	puts("using jsw_srand()");
+    puts("using jsw_srand()");
     jsw_seed(time(NULL));
-	num_itr = (jsw_rand() % 1000000);
+    num_itr = (jsw_rand() % 1000000);
 #else
-	puts("using srand()");
-	srand(time(NULL));
-	num_itr = (rand() % 1000000);
+    puts("using srand()");
+    srand(time(NULL));
+    num_itr = (rand() % 1000000);
 #endif
     
     printf("number iterations: %d\n", num_itr);
@@ -224,14 +223,14 @@ static int build_puzzle(int* puzzle, int* matrix)
     }
 
     print_grid(puzzle_solution);
-	remove_values(matrix);
+    remove_values(matrix);
     return 0;
 }
 
 int main(void) 
 {
     int *puzzle = puzzle_solution;
-	int *matrix = puzzle_matrix;
+    int *matrix = puzzle_matrix;
     build_puzzle(puzzle, matrix);
     return EXIT_SUCCESS;
 }
